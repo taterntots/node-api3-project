@@ -1,10 +1,21 @@
-const express = require('express');
+const express = require('express'); //importing a CommonJS module
+const helmet = require('helmet'); //yarn add helmet
+const userRouter = require('./users/userRouter.js'); //imports our userRouter
+const postRouter = require('./posts/postRouter'); //imports our postRouter
+const server = express(); //creates the server
 
-const server = express();
+//global middleware
+server.use(express.json()); //middleware needed to parse JSON
+server.use(helmet()); //middleware that adds a layer of security to the server
 
+//endpoints
 server.get('/', (req, res) => {
   res.send(`<h2>Let's write some middleware!</h2>`);
 });
+
+//routes
+server.use('/api/users', userRouter);
+server.use('/api/posts', postRouter);
 
 //custom middleware
 
