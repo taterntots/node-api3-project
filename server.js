@@ -7,6 +7,7 @@ const server = express(); //creates the server
 //global middleware
 server.use(express.json()); //middleware needed to parse JSON
 server.use(helmet()); //middleware that adds a layer of security to the server
+server.use(logger);
 
 //endpoints
 server.get('/', (req, res) => {
@@ -19,6 +20,9 @@ server.use('/api/posts', postRouter);
 
 //custom middleware
 
-function logger(req, res, next) {}
+function logger(req, res, next) {
+  console.log(req.method, req.url, new Date());
+  next();
+}
 
 module.exports = server;
