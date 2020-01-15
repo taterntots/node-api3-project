@@ -21,7 +21,8 @@ server.use('/api/posts', postRouter);
 //custom middleware
 
 function logger(req, res, next) {
-  console.log(req.method, req.url, new Date());
+  console.log(`${req.method} from ${req.url} on ${Date()}`);
+  // console.log(req.method, req.url, new Date());
   next();
 }
 
