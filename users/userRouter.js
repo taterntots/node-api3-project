@@ -51,18 +51,9 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:id', (req, res) => {
-  Database.getById(req.params.id)
-    .then(user => {
-      if (user) {
-        res.status(200).json(user);
-      } else {
-        res.status(404).json({ errorMessage: 'The user with the specified ID does not exist' })
-      }
-    })
-    .catch(error => {
-      res.status(500).json({ errorMessage: 'Could not retrieve specified user information' })
-    })
+router.get('/:id', validateUserId, (req, res) => {
+  res.status(200).json(req.user);
+  console.log(req.user);
 })
 
 router.get('/:id/posts', (req, res) => {
@@ -125,7 +116,20 @@ router.put('/:id', (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
-  // do your magic!
+  const id = req.params.id;
+  Database.getById(id)
+    .then(user => {
+      if (user) {
+        // console.log(user);
+        req.user = user;
+        next();
+      } else {
+        res.status(400).json({ errorMessage: 'The user with the specified ID does not exist' })
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ errorMessage: 'Could not retrieve specified user information' })
+    })
 }
 
 function validateUser(req, res, next) {
